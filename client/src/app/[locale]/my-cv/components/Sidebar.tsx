@@ -21,10 +21,20 @@ export default function Sidebar() {
             '.NET',
             'NextJs'
           ],
-          links: {
-            linkedin: 'LinkedIn',
-            github: 'GitHub'
-          },
+          links: [
+            {
+              name: 'LinkedIn',
+              link: 'https://www.linkedin.com/in/lqvinh2512/'
+            },
+            {
+              name: 'GitHub',
+              link: 'https://github.com/vinhlq2512'
+            },
+            {
+              name: 'Facebook',
+              link: 'https://www.facebook.com/vinhlq2512/'
+            }
+          ],
           futureGoals: [
             'IELTS 7.0 - 7.5',
             'Thạc sĩ Khoa học Máy tính tại Đại học Bách Khoa Hà Nội.'
@@ -32,7 +42,7 @@ export default function Sidebar() {
           personalInfo: [
             'Ngày sinh: 25/12/2001',
             'Địa chỉ: Hà Nội, Việt Nam',
-            'Số điện thoại: +84 775122001'
+            'Email: vinhlq2512@gmail.com'
           ]
         }
       : {
@@ -48,10 +58,20 @@ export default function Sidebar() {
             '.NET',
             'NextJs'
           ],
-          links: {
-            linkedin: 'LinkedIn',
-            github: 'GitHub'
-          },
+          links: [
+            {
+              name: 'LinkedIn',
+              link: 'https://www.linkedin.com/in/lqvinh2512/'
+            },
+            {
+              name: 'GitHub',
+              link: 'https://github.com/vinhlq2512'
+            },
+            {
+              name: 'Facebook',
+              link: 'https://www.facebook.com/vinhlq2512/'
+            }
+          ],
           futureGoals: [
             'IELTS 7.0 - 7.5',
             'Master of Computer Science at Hanoi University of Science and Technology.'
@@ -59,7 +79,7 @@ export default function Sidebar() {
           personalInfo: [
             'Date of Birth: 25/12/2001',
             'Address: Hanoi, Vietnam',
-            'Phone: +84 775122001'
+            'Email: vinhlq2512@gmail.com'
           ]
         };
 
@@ -108,27 +128,20 @@ export default function Sidebar() {
         <h2 className="text-lg font-semibold border-b border-gray-700 pb-2">
           {locale === 'en' ? 'Links' : 'Liên kết'}
         </h2>
+
         <ul className="mt-2 space-y-2 text-sm">
-          <li>
-            <Link
-              href="https://www.linkedin.com/in/lqvinh2512"
-              className="text-blue-400 hover:underline"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {data.links.linkedin}
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="https://github.com/VinhLam2512"
-              className="text-blue-400 hover:underline"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {data.links.github}
-            </Link>
-          </li>
+          {data.links.map((item) => (
+            <li key={item.link}>
+              <Link
+                href={item.link}
+                className="text-blue-400 hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {item.name}
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
 
