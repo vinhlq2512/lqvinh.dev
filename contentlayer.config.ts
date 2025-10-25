@@ -138,7 +138,7 @@ export const Authors = defineDocumentType(() => ({
     occupation: { type: 'string' },
     company: { type: 'string' },
     email: { type: 'string' },
-    twitter: { type: 'string' },
+    facebook: { type: 'string' },
     bluesky: { type: 'string' },
     linkedin: { type: 'string' },
     github: { type: 'string' },
@@ -147,9 +147,37 @@ export const Authors = defineDocumentType(() => ({
   computedFields,
 }))
 
+export const CV = defineDocumentType(() => ({
+  name: 'CV',
+  filePathPattern: 'cv/**/*.mdx',
+  contentType: 'mdx',
+  fields: {
+    // ===== Basic Info =====
+    name: { type: 'string', required: true },
+    avatar: { type: 'string' },
+    title: { type: 'string', description: 'Short title or position, e.g. Fullstack Developer' },
+    email: { type: 'string' },
+    address: { type: 'string' },
+    phone: { type: 'string' },
+    website: { type: 'string' },
+
+    // ===== Social Links =====
+    linkedin: { type: 'string' },
+    github: { type: 'string' },
+    facebook: { type: 'string' },
+    twitter: { type: 'string' },
+  },
+  computedFields: {
+    slug: {
+      type: 'string',
+      resolve: (doc) => doc._raw.sourceFileName.replace(/\.mdx$/, ''),
+    },
+  },
+}))
+
 export default makeSource({
   contentDirPath: 'data',
-  documentTypes: [Blog, Authors],
+  documentTypes: [Blog, Authors, CV],
   mdx: {
     cwd: process.cwd(),
     remarkPlugins: [
