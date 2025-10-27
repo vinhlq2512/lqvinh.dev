@@ -1,14 +1,14 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
-import { slug } from 'github-slugger'
-import { formatDate } from 'pliny/utils/formatDate'
-import { CoreContent } from 'pliny/utils/contentlayer'
-import type { Blog } from 'contentlayer/generated'
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import tagData from 'app/tag-data.json'
+import type { Blog } from 'contentlayer/generated'
+import { slug } from 'github-slugger'
+import { usePathname } from 'next/navigation'
+import { CoreContent } from 'pliny/utils/contentlayer'
+import { formatDate } from 'pliny/utils/formatDate'
 
 interface PaginationProps {
   totalPages: number
@@ -124,40 +124,70 @@ export default function ListLayoutWithTags({
             </div>
           </div>
           <div>
-            <ul>
+            <div className="grid gap-6 md:grid-cols-2">
               {displayPosts.map((post) => {
-                const { path, date, title, summary, tags } = post
+                const { path, date, title, summary, tags, readingTime, images } = post
                 return (
-                  <li key={path} className="py-5">
-                    <article className="flex flex-col space-y-2 xl:space-y-0">
-                      <dl>
-                        <dt className="sr-only">Published on</dt>
-                        <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
-                          <time dateTime={date} suppressHydrationWarning>
-                            {formatDate(date, siteMetadata.locale)}
-                          </time>
-                        </dd>
-                      </dl>
-                      <div className="space-y-3">
-                        <div>
-                          <h2 className="text-2xl leading-8 font-bold tracking-tight">
-                            <Link href={`/${path}`} className="text-gray-900 dark:text-gray-100">
-                              {title}
-                            </Link>
-                          </h2>
-                          <div className="flex flex-wrap">
-                            {tags?.map((tag) => <Tag key={tag} text={tag} />)}
+                  <article
+                    key={path}
+                    className="group overflow-hidden rounded-xl border border-gray-200 bg-white transition-all hover:shadow-lg dark:border-gray-800 dark:bg-gray-900 dark:hover:shadow-gray-800/50"
+                  >
+                    <Link href={`/${path}`}>
+                      <div className="aspect-[2/1] overflow-hidden bg-gray-100 dark:bg-gray-800">
+                        {images && images[0] ? (
+                          <img
+                            src={images[0]}
+                            alt={title}
+                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-gray-400">
+                            <svg
+                              className="h-12 w-12"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={1.5}
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                              />
+                            </svg>
                           </div>
-                        </div>
-                        <div className="prose max-w-none text-gray-500 dark:text-gray-400">
-                          {summary}
-                        </div>
+                        )}
                       </div>
-                    </article>
-                  </li>
+                    </Link>
+                    <div className="p-6">
+                      <div className="mb-3 flex flex-wrap gap-2">
+                        {tags?.slice(0, 2).map((tag) => <Tag key={tag} text={tag} />)}
+                      </div>
+                      <h2 className="mb-3 text-xl leading-7 font-bold tracking-tight">
+                        <Link
+                          href={`/${path}`}
+                          className="hover:text-primary-600 dark:hover:text-primary-400 text-gray-900 transition-colors dark:text-gray-100"
+                        >
+                          {title}
+                        </Link>
+                      </h2>
+                      <p className="mb-4 line-clamp-3 text-sm text-gray-600 dark:text-gray-400">
+                        {summary}
+                      </p>
+                      <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                        <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
+                        {readingTime && (
+                          <>
+                            <span>•</span>
+                            <span>{readingTime}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </article>
                 )
               })}
-            </ul>
+            </div>
             {pagination && pagination.totalPages > 1 && (
               <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />
             )}
